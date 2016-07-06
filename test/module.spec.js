@@ -1,35 +1,25 @@
 /* eslint-env mocha */
 import { expect } from 'chai';
-import { hello, goodbye } from '../src';
+import Dummy from './dummyComponent';
+
+import { makeCycleReactDriver } from '../src';
 
 describe('cycle-react-driver', () => {
-  describe('hello function', () => {
-    it('Should return a greeting with the name', () => {
-      const expected = 'Hello, Bob!';
-      const actual = hello('Bob');
-
-      expect(actual).to.equal(expected);
+  describe('makeCycleReactDriver', () => {
+    it('should accept a selector and a React component as input', () => {
+      expect(() => makeCycleReactDriver('#app', Dummy)).to.not.throw;
     });
-    it('Should return a default greeting without name', () => {
-      const expected = 'Hello, World!';
-      const actual = hello();
 
-      expect(actual).to.equal(expected);
+    it('should return a function', () => {
+      expect(makeCycleReactDriver('#app', Dummy)).to.be.a('function');
     });
-  });
 
-  describe('goodbye function', () => {
-    it('Should return a goodbye with the name', () => {
-      const expected = 'Bye Bob.';
-      const actual = goodbye('Bob');
-
-      expect(actual).to.equal(expected);
+    it('should throw if there are less than two arguments', () => {
+      expect(() => makeCycleReactDriver('#app')).to.throw(Error, /Missing root component/);
     });
-    it('Should return a default goodbye without name', () => {
-      const expected = 'Bye World.';
-      const actual = goodbye();
 
-      expect(actual).to.equal(expected);
+    it('should throw if the first argument is not a string', () => {
+      expect(() => makeCycleReactDriver(null, Dummy)).to.throw(Error, /Invalid selector/);
     });
   });
 });

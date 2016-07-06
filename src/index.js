@@ -1,12 +1,12 @@
-function hello(name = 'World') {
-  return `Hello, ${name}!`;
-}
 
-function goodbye(name = 'World') {
-  return `Bye ${name}.`;
-}
+export function makeCycleReactDriver(selector, component) {
+  if (typeof component === 'undefined') {
+    throw Error('Missing root component in makeCycleReactDriver');
+  }
 
-export default {
-  hello,
-  goodbye,
-};
+  if (typeof selector !== 'string') {
+    throw new Error('Invalid selector');
+  }
+
+  return sinks => sinks;
+}
