@@ -5,6 +5,7 @@
     "test": {
       "plugins": [
         "__coverage__",
+        "rewire"
       ]
     }
   }

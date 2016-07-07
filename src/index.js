@@ -1,3 +1,5 @@
+import ReactDOM from 'react-dom';
+import React from 'react';
 
 export function makeCycleReactDriver(selector, component) {
   if (typeof component === 'undefined') {
@@ -8,5 +10,9 @@ export function makeCycleReactDriver(selector, component) {
     throw new Error('Invalid selector');
   }
 
-  return sinks => sinks;
+  return sinks => {
+    sinks.test.subscribe(() => {
+      ReactDOM.render(<component />, selector);
+    });
+  };
 }

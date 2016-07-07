@@ -43,6 +43,7 @@
     "babel-loader": "^6.2.4",
     "babel-plugin-__coverage__": "^11.0.0",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-rewire": "^1.0.0-rc-4",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
@@ -51,6 +52,7 @@
     "commitizen": "^2.8.2",
     "cross-env": "^1.0.8",
     "cz-conventional-changelog": "^1.1.6",
+    "enzyme": "^2.3.0",
     "eslint": "^2.12.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.8.0",
@@ -61,6 +63,7 @@
     "npm-run-all": "^2.1.2",
     "nyc": "^6.4.4",
     "react": "^15.2.0",
+    "react-addons-test-utils": "^15.2.0",
     "react-dom": "^15.2.0",
     "rimraf": "^2.5.2",
     "semantic-release": "^4.3.5",
@@ -70,7 +73,10 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "in-publish": "^2.0.0"
+    "@reactivex/rxjs": "^5.0.0-beta.10",
+    "in-publish": "^2.0.0",
+    "react": "^15.2.0",
+    "react-dom": "^15.2.0"
   },
   "config": {
     "ghooks": {
