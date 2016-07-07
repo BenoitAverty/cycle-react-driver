@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
-import Rx from 'rxjs/Rx';
+import Rx from '@reactivex/rxjs';
 
 import makeDriverRewireAPI, { makeCycleReactDriver } from '../src';
 
