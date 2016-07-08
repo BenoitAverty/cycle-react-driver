@@ -2,9 +2,9 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import Rx from '@reactivex/rxjs';
 
-export function makeCycleReactDriver(selector, component) {
-  if (typeof component === 'undefined') {
-    throw Error('Missing root component in makeCycleReactDriver');
+export function makeCycleReactDriver(selector, element) {
+  if (typeof element === 'undefined') {
+    throw Error('Missing root jsx expression in makeCycleReactDriver');
   }
 
   if (typeof selector !== 'string') {
@@ -18,7 +18,7 @@ export function makeCycleReactDriver(selector, component) {
     Rx.Observable.combineLatest(...observableProps).subscribe(propsArray => {
       const props = propsArray.reduce((obj, curr) => ({ ...obj, ...curr }));
 
-      ReactDOM.render(<component {...props} />, selector);
+      ReactDOM.render(React.cloneElement(element, props), selector);
     });
   }
 
