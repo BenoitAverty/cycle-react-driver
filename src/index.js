@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
+import Rx from '@reactivex/rxjs';
 
 export function makeCycleReactDriver(selector, component) {
   if (typeof component === 'undefined') {
@@ -10,9 +11,16 @@ export function makeCycleReactDriver(selector, component) {
     throw new Error('Invalid selector');
   }
 
-  return sinks => {
-    sinks.test.subscribe(() => {
-      ReactDOM.render(<component />, selector);
+  function cycleReactDriver(sinks) {
+    const observableProps = Object.keys(sinks)
+      .map(k => sinks[k].map(prop => ({ [k]: prop })));
+
+    Rx.Observable.combineLatest(...observableProps).subscribe(propsArray => {
+      const props = propsArray.reduce((obj, curr) => ({ ...obj, ...curr }));
+
+      ReactDOM.render(<component {...props} />, selector);
     });
-  };
+  }
+
+  return cycleReactDriver;
 }

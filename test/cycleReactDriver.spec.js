@@ -56,5 +56,30 @@ describe('cycle-react-driver', () => {
       sinks.test.next('value');
       expect(renderMock.render).to.have.been.called;
     });
+
+    it('Should render the component with the value of the observable', () => {
+      const sinks = { test: new Rx.Subject() };
+
+      cycleReactDriver(sinks);
+      sinks.test.next('value');
+      expect(renderMock.getWrapper().prop('test')).to.equal('value');
+    });
+
+    it('Should handle several observables', () => {
+      const sinks = {
+        prop1: new Rx.Subject(),
+        prop2: new Rx.Subject(),
+      };
+
+      cycleReactDriver(sinks);
+
+      sinks.prop1.next('value 1');
+      sinks.prop2.next('value 2');
+
+      expect(renderMock.getWrapper().props()).to.deep.equal({
+        prop1: 'value 1',
+        prop2: 'value 2',
+      });
+    });
   });
 });
