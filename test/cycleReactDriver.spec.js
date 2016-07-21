@@ -42,13 +42,13 @@ describe('cycle-react-driver', () => {
       makeDriverRewireAPI.__ResetDependency__('ReactDOM');
     });
 
-    it('Shouldn\'t render the component immediately when called', () => {
+    it('Should render the component immediately when called', () => {
       const cycleReactDriver = makeCycleReactDriver('#app', <Dummy />);
       const sinks = { test: new Rx.Subject() };
 
       cycleReactDriver(sinks);
 
-      expect(renderMock.render).to.not.have.been.called;
+      expect(renderMock.render).to.have.been.calledWith(<Dummy />, '#app');
     });
 
     it.skip('Should call the render function when an observable passed as input emits an event',

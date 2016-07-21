@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
-import Rx from '@reactivex/rxjs';
+// import React from 'react';
+// import Rx from '@reactivex/rxjs';
 
 export function makeCycleReactDriver(selector, element) {
   if (typeof element === 'undefined') {
@@ -11,15 +11,17 @@ export function makeCycleReactDriver(selector, element) {
     throw new Error('Invalid selector');
   }
 
-  function cycleReactDriver(sinks) {
-    const observableProps = Object.keys(sinks)
-      .map(k => sinks[k].map(prop => ({ [k]: prop })));
+  function cycleReactDriver() {
+    // const observableProps = Object.keys(sinks)
+    //   .map(k => sinks[k].map(prop => ({ [k]: prop })));
 
-    Rx.Observable.combineLatest(...observableProps).subscribe(propsArray => {
-      const props = propsArray.reduce((obj, curr) => ({ ...obj, ...curr }));
+    // Rx.Observable.combineLatest(...observableProps).subscribe(propsArray => {
+    //   const props = propsArray.reduce((obj, curr) => ({ ...obj, ...curr }));
+    //
+    //   ReactDOM.render(React.cloneElement(element, props), selector);
+    // });
 
-      ReactDOM.render(React.cloneElement(element, props), selector);
-    });
+    ReactDOM.render(element, selector);
   }
 
   return cycleReactDriver;
