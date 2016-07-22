@@ -5,13 +5,25 @@ export default function makeRenderMock() {
   let wrapper;
   let mountPoint;
 
-  function render(component, selectorOrElement) {
+  function render(reactElement, selectorOrElement) {
     mountPoint = selectorOrElement;
-    wrapper = shallow(component);
+    wrapper = shallow(reactElement);
   }
 
-  function getWrapper() {
-    return wrapper;
+  /**
+   * Retrieve the shallow wrapper rendered at specified depth
+   */
+  function getWrapper(depth = 0) {
+    if (depth === 0) {
+      return wrapper;
+    }
+
+    let wrapperAtDepth = wrapper;
+    for (let i = 0; i < depth; ++i) {
+      wrapperAtDepth = wrapperAtDepth.shallow();
+    }
+
+    return wrapperAtDepth;
   }
 
   function getMountPoint() {
