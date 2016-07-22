@@ -65,5 +65,14 @@ describe('Cycle React Driver', () => {
 
       expect(renderMock.getWrapper()).to.contain(<Dummy />);
     });
+
+    it('Should pass properties through if the observables don\'t emit anything', () => {
+      const ConnectedDummy = connect()(Dummy);
+      const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy prop="prop" />, '#app');
+
+      cycleReactDriver();
+
+      expect(renderMock.getWrapper()).to.contain(<Dummy prop="prop" />);
+    });
   });
 });
