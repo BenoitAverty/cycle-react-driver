@@ -1,18 +1,13 @@
 /* eslint-env mocha */
 import React from 'react';
-import chai, { expect } from 'chai';
-import sinonChai from 'sinon-chai';
-import chaiEnzyme from 'chai-enzyme';
-import Rx from '@reactivex/rxjs';
+import { expect } from 'chai';
+import sinon from 'sinon';
 
 import makeCycleReactDriver from '../src/makeCycleReactDriver';
 import connect from '../src/connect';
 
 import makeRenderMock from './renderMock';
 import Dummy from './dummyComponent';
-
-chai.use(sinonChai);
-chai.use(chaiEnzyme());
 
 describe('makeCycleReactDriver', () => {
   it('should accept a selector and a jsx expression as input', () => {
@@ -46,13 +41,20 @@ describe('Cycle React Driver', () => {
   });
 
   describe('Running the driver', () => {
-    it('Should render the component immediately when called', () => {
+    it('Should render immediately when called', () => {
       const cycleReactDriver = makeCycleReactDriver(<Dummy />, '#app');
-      const sinks = { test: new Rx.Subject() };
 
-      cycleReactDriver(sinks);
+      cycleReactDriver();
 
-      expect(renderMock.render).to.have.been.calledWith(<Dummy />, '#app');
+      expect(renderMock.render).to.have.been.called;
+    });
+
+    it('Should render the component it was given', () => {
+      const cycleReactDriver = makeCycleReactDriver(<Dummy />, '#app');
+
+      cycleReactDriver();
+
+      expect(renderMock.getWrapper()).to.contain(<Dummy />);
     });
   });
 
@@ -73,6 +75,16 @@ describe('Cycle React Driver', () => {
       cycleReactDriver();
 
       expect(renderMock.getWrapper()).to.contain(<Dummy prop="prop" />);
+    });
+
+    it('Connected components should subscribe to Observables passed to the driver', () => {
+      const ConnectedDummy = connect()(Dummy);
+      const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
+      const obs = { subscribe: sinon.spy() };
+
+      cycleReactDriver({ obs });
+
+      expect(obs.subscribe).to.have.been.called;
     });
   });
 });

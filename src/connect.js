@@ -7,9 +7,23 @@ const connect = () => (Component) => {
   //   }
   // }
 
-  function ConnectedComponent(props) {
-    return <Component {...props} />;
-  }
+  const ConnectedComponent = React.createClass({
+    componentDidMount() {
+      const obs = this.context.cycleReactDriverObservables;
+      if (obs !== undefined) {
+        for (const key of Object.keys(obs)) {
+          obs[key].subscribe();
+        }
+      }
+    },
+
+    render() {
+      return <Component {...this.props} />;
+    },
+  });
+  ConnectedComponent.contextTypes = {
+    cycleReactDriverObservables: React.PropTypes.object,
+  };
 
   return ConnectedComponent;
 };

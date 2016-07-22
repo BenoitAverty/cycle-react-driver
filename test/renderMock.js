@@ -1,4 +1,4 @@
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import sinon from 'sinon';
 
 export default function makeRenderMock() {
@@ -7,23 +7,11 @@ export default function makeRenderMock() {
 
   function render(reactElement, selectorOrElement) {
     mountPoint = selectorOrElement;
-    wrapper = shallow(reactElement);
+    wrapper = mount(reactElement);
   }
 
-  /**
-   * Retrieve the shallow wrapper rendered at specified depth
-   */
-  function getWrapper(depth = 0) {
-    if (depth === 0) {
-      return wrapper;
-    }
-
-    let wrapperAtDepth = wrapper;
-    for (let i = 0; i < depth; ++i) {
-      wrapperAtDepth = wrapperAtDepth.shallow();
-    }
-
-    return wrapperAtDepth;
+  function getWrapper() {
+    return wrapper;
   }
 
   function getMountPoint() {

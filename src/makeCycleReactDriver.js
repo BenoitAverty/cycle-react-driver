@@ -1,7 +1,52 @@
 import ReactDOM from 'react-dom';
-// import React from 'react';
+import React from 'react';
 // import Rx from '@reactivex/rxjs';
 
+/**
+ * Wrapper component that sets the observables in the react context so they are visible
+ * by "connect".
+ */
+// class CycleWrapper extends React.Component {
+//   getChildContext() {
+//     return { cycleReactDriverObservables: this.props.observables };
+//   }
+//
+//   render() {
+//     return (
+//       <div>
+//         {this.props.children}
+//       </div>
+//     );
+//   }
+// }
+
+const CycleWrapper = React.createClass({
+  propTypes: {
+    observables: React.PropTypes.object,
+    children: React.PropTypes.element,
+  },
+
+  childContextTypes: {
+    cycleReactDriverObservables: React.PropTypes.object,
+  },
+
+  getChildContext() {
+    return { cycleReactDriverObservables: this.props.observables };
+  },
+
+  render() {
+    return (
+      <div>
+        {this.props.children}
+      </div>
+    );
+  },
+});
+
+
+/**
+ * Factory method for the cycle react driver.
+ */
 function makeCycleReactDriver(element, selector) {
   if (typeof element === 'undefined') {
     throw Error('Missing or invalid react element');
@@ -11,20 +56,17 @@ function makeCycleReactDriver(element, selector) {
     throw new Error('Missing or invalid selector');
   }
 
-  function cycleReactDriver() {
-    // const observableProps = Object.keys(sinks)
-    //   .map(k => sinks[k].map(prop => ({ [k]: prop })));
+  function cycleReactDriver(sinks) {
+    const tree = (
+      <CycleWrapper observables={sinks}>
+        {element}
+      </CycleWrapper>
+    );
 
-    // Rx.Observable.combineLatest(...observableProps).subscribe(propsArray => {
-    //   const props = propsArray.reduce((obj, curr) => ({ ...obj, ...curr }));
-    //
-    //   ReactDOM.render(React.cloneElement(element, props), selector);
-    // });
-
-    ReactDOM.render(element, selector);
+    ReactDOM.render(tree, selector);
   }
 
   return cycleReactDriver;
 }
 
-export default makeCycleReactDriver;
+export default (() => makeCycleReactDriver)();

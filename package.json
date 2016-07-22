@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "cross-env BABEL_ENV=test mocha --compilers js:babel-core/register --recursive",
-    "test:with-coverage": "npm run clean:coverage && cross-env BABEL_ENV=test nyc --reporter=lcov mocha --compilers js:babel-core/register --recursive",
+    "test": "cross-env BABEL_ENV=test mocha --compilers js:babel-core/register --require ./test/setup.js --recursive",
+    "test:with-coverage": "npm run clean:coverage && cross-env BABEL_ENV=test nyc --reporter=lcov mocha --compilers js:babel-core/register --require ./test/setup.js --recursive",
     "test:check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
     "test:publish-coverage": "codecov",
     "prebuild": "npm run clean",
@@ -60,6 +60,7 @@
     "eslint-plugin-jsx-a11y": "^1.2.2",
     "eslint-plugin-react": "^5.1.1",
     "ghooks": "^1.2.4",
+    "jsdom": "^9.4.1",
     "mocha": "^2.5.1",
     "npm-run-all": "^2.1.2",
     "nyc": "^7.0.0",
