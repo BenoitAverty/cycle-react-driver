@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 import React from 'react';
+import Rx from '@reactivex/rxjs';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -77,7 +78,7 @@ describe('Cycle React Driver', () => {
       expect(renderMock.getWrapper()).to.contain(<Dummy prop="prop" />);
     });
 
-    it('Connected components should subscribe to Observables passed to the driver', () => {
+    it('Should trigger a subscribtion to Observables passed to the driver', () => {
       const ConnectedDummy = connect()(Dummy);
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
       const obs = { subscribe: sinon.spy() };
@@ -85,6 +86,17 @@ describe('Cycle React Driver', () => {
       cycleReactDriver({ obs });
 
       expect(obs.subscribe).to.have.been.called;
+    });
+
+    it('Should send observables values as props to wrapped components', () => {
+      const ConnectedDummy = connect()(Dummy);
+      const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
+      const obs = new Rx.Subject();
+
+      cycleReactDriver({ obs });
+      expect(renderMock.getWrapper()).to.contain(<Dummy />);
+      obs.next('value');
+      expect(renderMock.getWrapper()).to.contain(<Dummy obs="value" />);
     });
   });
 });

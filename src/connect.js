@@ -12,13 +12,17 @@ const connect = () => (Component) => {
       const obs = this.context.cycleReactDriverObservables;
       if (obs !== undefined) {
         for (const key of Object.keys(obs)) {
-          obs[key].subscribe();
+          obs[key].subscribe(this.propSubscritpion.bind(this));
         }
       }
     },
 
+    propSubscritpion(prop) {
+      this.setState({ obs: prop });
+    },
+
     render() {
-      return <Component {...this.props} />;
+      return <Component {...this.props} {...this.state} />;
     },
   });
   ConnectedComponent.contextTypes = {
