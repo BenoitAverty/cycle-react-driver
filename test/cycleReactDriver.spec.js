@@ -6,8 +6,8 @@ import sinon from 'sinon';
 import makeCycleReactDriver from '../src/makeCycleReactDriver';
 import connect from '../src/connect';
 
-import makeRenderMock from './renderMock';
-import Dummy from './dummyComponent';
+import makeRenderMock from './utils/renderMock';
+import Dummy from './utils/dummyComponent';
 
 describe('makeCycleReactDriver', () => {
   it('should accept a selector and a jsx expression as input', () => {
