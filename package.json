@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "cross-env BABEL_ENV=test mocha --compilers js:babel-core/register --require test/utils/setup.js",
-    "test:with-coverage": "npm run clean:coverage && cross-env BABEL_ENV=test nyc --reporter=lcov npm test",
+    "test:with-coverage": "npm run clean:coverage && cross-env BABEL_ENV=test nyc --reporter=text npm test",
     "test:check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
     "test:publish-coverage": "codecov",
     "prebuild": "npm run clean",
@@ -82,7 +82,7 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "npm run test -- -R dot",
+      "pre-commit": "npm run test:with-coverage -- -- -R dot && npm run test:check-coverage",
       "commit-msg": "validate-commit-msg"
     },
     "commitizen": {
