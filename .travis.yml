@@ -12,10 +12,8 @@ node_js:
 before_script:
   - npm prune
 script:
-  - npm run test:with-coverage
-  - npm run test:check-coverage
+  - npm run test
 after_success:
-  - npm run test:publish-coverage
   # No need to build as it is done in the prepublish script
   - npm run semantic-release
 branches:
