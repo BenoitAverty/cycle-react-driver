@@ -12,7 +12,7 @@ const connect = () => (Component) => {
       const obs = this.context.cycleReactDriverObservables;
       if (obs !== undefined) {
         for (const key of Object.keys(obs)) {
-          obs[key].subscribe(this.propSubscritpion.bind(this));
+          obs[key].subscribe(this.propSubscritpion);
         }
       }
     },
