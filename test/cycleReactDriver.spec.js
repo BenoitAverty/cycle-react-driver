@@ -88,7 +88,7 @@ describe('Cycle React Driver', () => {
       expect(obs.subscribe).to.have.been.called;
     });
 
-    it('Should send observables values as props to wrapped components', () => {
+    it('Should send observable values as props to wrapped components', () => {
       const ConnectedDummy = connect()(Dummy);
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
       const obs = new Rx.Subject();
@@ -98,5 +98,7 @@ describe('Cycle React Driver', () => {
       obs.next('value');
       expect(renderMock.getWrapper()).to.contain(<Dummy obs="value" />);
     });
+
+    it('Should send multiple observables values as props to wrapped component');
   });
 });
