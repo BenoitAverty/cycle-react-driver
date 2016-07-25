@@ -1,36 +1,40 @@
 import React from 'react';
 
 const connect = () => (Component) => {
-  // class ConnectedComponent extends React.Component {
-  //   render() {
-  //     return <Component {...this.props} />;
-  //   }
-  // }
-
-  const ConnectedComponent = React.createClass({
+  class ConnectedComponent extends React.Component {
     componentDidMount() {
-      const obs = this.context.cycleReactDriverObservables;
-      if (obs !== undefined) {
-        for (const key of Object.keys(obs)) {
-          obs[key].subscribe(this.propSubscritpion);
-        }
-      }
-    },
+      this.context.cycleReactDriverObservable.subscribe(
+        this.propSubscritpion.bind(this)
+      );
+    }
 
     propSubscritpion(prop) {
-      this.setState({ obs: prop });
-    },
+      if (prop.value) {
+        this.setState({
+          [prop.name]: prop.value,
+        });
+      }
+      else if (this.props[prop.name]) {
+        this.setState({
+          [prop.name]: this.props[prop.name],
+        });
+      }
+      else {
+        this.setState({
+          [prop.name]: undefined,
+        });
+      }
+    }
 
     render() {
       return <Component {...this.props} {...this.state} />;
-    },
-  });
+    }
+  }
   ConnectedComponent.contextTypes = {
-    cycleReactDriverObservables: React.PropTypes.object,
+    cycleReactDriverObservable: React.PropTypes.object,
   };
 
   return ConnectedComponent;
 };
 
-// Workaround for a weird bug in nyc. http://github.com/istanbuljs/nyc/issues/325
-export default (() => connect)();
+export default connect;

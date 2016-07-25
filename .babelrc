@@ -8,6 +8,5 @@
         "rewire"
       ]
     }
-  },
-  "sourceMaps": "inline"
+  }
 }
