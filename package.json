@@ -14,13 +14,14 @@
     "prebuild": "npm run clean",
     "build": "npm-run-all --parallel build:*",
     "build:lib": "babel src --out-dir lib",
-    "build:umd": "webpack --output-filename cycle-react-driver.js",
-    "build:umd.min": "webpack -p --output-filename cycle-react-driver.min.js",
+    "build:umd": "webpack --config umd-build.webpack.config.js --output-filename cycle-react-driver.js",
+    "build:umd.min": "webpack --config umd-build.webpack.config.js -p --output-filename cycle-react-driver.min.js",
     "prepublish": "in-install || npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "clean": "npm-run-all --parallel clean:*",
     "clean:build": "rimraf dist lib",
-    "clean:coverage": "rimraf .nyc_output coverage"
+    "clean:coverage": "rimraf .nyc_output coverage",
+    "examples": "webpack-dev-server --config examples.webpack.config.js --content-base examples/ --inline"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,8 @@
   },
   "homepage": "https://github.com/BenoitAverty/cycle-react-driver#readme",
   "devDependencies": {
+    "@cycle/dom": "^11.0.1",
+    "@cycle/rxjs-run": "^3.0.2",
     "babel-cli": "^6.9.0",
     "babel-core": "^6.9.0",
     "babel-loader": "^6.2.4",
@@ -76,7 +79,7 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "@reactivex/rxjs": "^5.0.0-beta.10",
+    "rxjs": "^5.0.0-beta.10",
     "in-publish": "^2.0.0",
     "react": "^15.2.0",
     "react-dom": "^15.2.0"

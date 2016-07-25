@@ -6,7 +6,8 @@
       "plugins": [
         "__coverage__",
         "rewire"
-      ]
+      ],
+      "sourceMaps": "inline"
     }
   }
 }

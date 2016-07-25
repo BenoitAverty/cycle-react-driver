@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import React from 'react';
-import Rx from '@reactivex/rxjs';
+import Rx from 'rxjs';
 import { expect } from 'chai';
 import sinon from 'sinon';
 

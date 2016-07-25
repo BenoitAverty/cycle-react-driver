@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import Rx from '@reactivex/rxjs';
+import Rx from 'rxjs';
 
 /**
  * Wrapper component that sets the observables in the react context so they are visible
