@@ -3,9 +3,11 @@ import React from 'react';
 const connect = () => (Component) => {
   class ConnectedComponent extends React.Component {
     componentDidMount() {
-      this.context.cycleReactDriverObservable.subscribe(
-        this.propSubscritpion.bind(this)
-      );
+      if (this.context.cycleReactDriverObservable !== undefined) {
+        this.context.cycleReactDriverObservable.subscribe(
+          this.propSubscritpion.bind(this)
+        );
+      }
     }
 
     propSubscritpion(prop) {

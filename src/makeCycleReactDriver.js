@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import Rx from 'rxjs';
 
 /**
  * Wrapper component that sets the observables in the react context so they are visible
@@ -28,30 +27,6 @@ CycleWrapper.childContextTypes = {
 };
 
 /**
- * The driver will receive several observables representing props to send to connected components.
- * This function converts all observables into a single observable, and adds to each event a
- * "propName" attribute to remember the name of the prop.
- * exemple:
- * prop1: ---------------------------------a-----------------
- * prop2: ---x-----------------------------------------------
- *        mergeAllObservables(prop1, prop2)
- *        ---{name:'prop2', value:x}-------{name:'prop1', value: a}---
- */
-function mergeAllObservables(observables) {
-  const namedObs = [];
-
-  if (observables === undefined) {
-    return Rx.Observable.empty();
-  }
-
-  for (const k of Object.keys(observables)) {
-    namedObs.push(observables[k].map(p => ({ name: k, value: p })));
-  }
-
-  return namedObs.reduce((acc, curr) => acc.merge(curr), Rx.Observable.empty());
-}
-
-/**
  * Factory method for the cycle react driver.
  */
 function makeCycleReactDriver(element, selector) {
@@ -63,9 +38,9 @@ function makeCycleReactDriver(element, selector) {
     throw new Error('Missing or invalid selector');
   }
 
-  function cycleReactDriver(sinks) {
+  function cycleReactDriver(sink) {
     const tree = (
-      <CycleWrapper observable={mergeAllObservables(sinks)}>
+      <CycleWrapper observable={sink}>
         {element}
       </CycleWrapper>
     );

@@ -84,7 +84,7 @@ describe('Cycle React Driver', () => {
       const obs = new Rx.Subject();
       sinon.spy(obs, 'subscribe');
 
-      cycleReactDriver({ obs });
+      cycleReactDriver(obs);
 
       expect(obs.subscribe).to.have.been.called;
     });
@@ -94,9 +94,10 @@ describe('Cycle React Driver', () => {
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
       const obs = new Rx.Subject();
 
-      cycleReactDriver({ obs });
+      cycleReactDriver(obs);
       expect(renderMock.getWrapper()).to.contain(<Dummy />);
-      obs.next('value');
+      obs.next({ name: 'obs', value: 'value' });
+
       expect(renderMock.getWrapper()).to.contain(<Dummy obs="value" />);
     });
 
@@ -106,28 +107,31 @@ describe('Cycle React Driver', () => {
       const obs1 = new Rx.Subject();
       const obs2 = new Rx.Subject();
 
-      cycleReactDriver({ obs1, obs2 });
+      cycleReactDriver(Rx.Observable.merge(obs1, obs2));
       expect(renderMock.getWrapper()).to.contain(<Dummy />);
-      obs1.next('value1');
-      obs2.next('value2');
+      obs1.next({ name: 'obs1', value: 'value1' });
+      obs2.next({ name: 'obs2', value: 'value2' });
+
       expect(renderMock.getWrapper()).to.contain(<Dummy obs1="value1" obs2="value2" />);
     });
 
     it('Should keep original props on components', () => {
       const ConnectedDummy = connect()(Dummy);
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy original="prop" />, '#app');
-      const obs = Rx.Observable.of('value');
+      const obs = Rx.Observable.of({ name: 'obs', value: 'value' });
 
-      cycleReactDriver({ obs });
+      cycleReactDriver(obs);
+
       expect(renderMock.getWrapper().find(Dummy)).to.have.prop('original', 'prop');
     });
 
     it('Should give priority to props from the driver', () => {
       const ConnectedDummy = connect()(Dummy);
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy prop="original" />, '#app');
-      const prop = Rx.Observable.of('overriden');
+      const prop = Rx.Observable.of({ name: 'prop', value: 'overriden' });
 
-      cycleReactDriver({ prop });
+      cycleReactDriver(prop);
+
       expect(renderMock.getWrapper().find(Dummy)).to.have.prop('prop', 'overriden');
     });
 
@@ -136,19 +140,22 @@ describe('Cycle React Driver', () => {
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy prop="original" />, '#app');
       const prop = new Rx.Subject();
 
-      cycleReactDriver({ prop });
-      prop.next('some value');
-      prop.next(undefined);
+      cycleReactDriver(prop);
+      prop.next({ name: 'prop', value: 'some value' });
+      prop.next({ name: 'prop', value: undefined });
+
       expect(renderMock.getWrapper().find(Dummy)).to.have.prop('prop', 'original');
     });
+
     it('Shouldn\'t render a prop from the driver if its value is undefined', () => {
       const ConnectedDummy = connect()(Dummy);
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
       const prop = new Rx.Subject();
 
-      cycleReactDriver({ prop });
-      prop.next('some value');
-      prop.next(undefined);
+      cycleReactDriver(prop);
+      prop.next({ name: 'prop', value: 'some value' });
+      prop.next({ name: 'prop', value: undefined });
+
       expect(renderMock.getWrapper().find(Dummy)).to.not.have.prop('prop');
     });
   });
