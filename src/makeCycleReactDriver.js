@@ -45,7 +45,7 @@ function makeCycleReactDriver(element, selector) {
       </CycleWrapper>
     );
 
-    ReactDOM.render(tree, selector);
+    ReactDOM.render(tree, document.querySelector(selector));
   }
 
   return cycleReactDriver;

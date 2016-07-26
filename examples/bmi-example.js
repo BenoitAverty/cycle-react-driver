@@ -1,27 +1,39 @@
 import { run } from '@cycle/rxjs-run';
-import Rx from '@reactivex/rxjs';
+import { makeDOMDriver } from '@cycle/dom';
 import React from 'react';
 import { makeCycleReactDriver, connect } from '../src';
 
+/**
+ * React tree.
+ */
 const Hello = (props) => <h1>{props.label}</h1>;
 Hello.propTypes = {
-  label: React.PropTypes.string.required,
+  label: React.PropTypes.string.isRequired,
 };
-
 const ConnectedHello = connect()(Hello);
 
-const App = () => <ConnectedHello />;
+const App = () => <ConnectedHello label="pending" />;
 
-const main = () => ({
-  react: {
-    label: Rx.Observable.of('Hello, World!'),
-  },
-});
+/**
+ * Cycle app
+ */
+const main = ({ DOM }) => {
+  const counter$ = DOM.select('#app').events('click')
+    .mapTo(1)
+    .startWith(1)
+    .scan((a, b) => a+b);
 
-
-const drivers = {
-  react: makeCycleReactDriver(<App />, '#app'),
+  return {
+    react: counter$.map(c => ({ name: 'label', value: `Count: ${c}` })),
+  };
 };
 
-console.log('Running app with cycle...');
+/**
+ * Run everything.
+ */
+const drivers = {
+  react: makeCycleReactDriver(<App />, '#app'),
+  DOM: makeDOMDriver('#app'),
+};
+
 run(main, drivers);

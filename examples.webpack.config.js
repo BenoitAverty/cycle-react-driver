@@ -9,6 +9,7 @@ module.exports = {
     path: join(__dirname, 'examples'),
     filename: '[name].dist.js',
   },
+  devtool: 'source-map',
   module: {
     loaders: [
       {
