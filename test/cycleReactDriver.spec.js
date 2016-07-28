@@ -8,7 +8,7 @@ import makeCycleReactDriver from '../src/makeCycleReactDriver';
 import connect from '../src/connect';
 
 import makeRenderMock from './utils/renderMock';
-import Dummy from './utils/dummyComponent';
+import { Dummy } from './utils/dummyComponents';
 
 describe('makeCycleReactDriver', () => {
   it('should accept a selector and a jsx expression as input', () => {
@@ -20,12 +20,12 @@ describe('makeCycleReactDriver', () => {
   });
 
   it('should throw if there are less than two arguments', () => {
-    expect(() => makeCycleReactDriver(<Dummy />)).to.throw(Error, /Missing or invalid selector/);
-    expect(() => makeCycleReactDriver()).to.throw(Error, /Missing or invalid react element/);
+    expect(() => makeCycleReactDriver(<Dummy />)).to.throw(Error);
+    expect(() => makeCycleReactDriver()).to.throw(Error);
   });
 
   it('should throw if the second argument is not a string', () => {
-    expect(() => makeCycleReactDriver(<Dummy />, null)).to.throw(Error, /invalid selector/);
+    expect(() => makeCycleReactDriver(<Dummy />, null)).to.throw(Error);
   });
 });
 
@@ -41,25 +41,31 @@ describe('Cycle React Driver', () => {
     makeCycleReactDriver.__ResetDependency__('ReactDOM');
   });
 
-  describe('Running the driver', () => {
-    it('Should render immediately when called', () => {
-      const cycleReactDriver = makeCycleReactDriver(<Dummy />, '#app');
+  it('Should render the component immediately when called', () => {
+    const cycleReactDriver = makeCycleReactDriver(<Dummy />, '#app');
 
-      cycleReactDriver();
+    cycleReactDriver();
 
-      expect(renderMock.render).to.have.been.called;
-    });
-
-    it('Should render the component it was given', () => {
-      const cycleReactDriver = makeCycleReactDriver(<Dummy />, '#app');
-
-      cycleReactDriver();
-
-      expect(renderMock.getWrapper()).to.contain(<Dummy />);
-    });
+    expect(renderMock.render).to.have.been.called;
   });
 
-  describe('Rendering connected components', () => {
+  it('Should render the component it was given', () => {
+    const cycleReactDriver = makeCycleReactDriver(<Dummy />, '#app');
+
+    cycleReactDriver();
+
+    expect(renderMock.getWrapper()).to.contain(<Dummy />);
+  });
+
+  it('Should return a source object with a select method', () => {
+    const cycleReactDriver = makeCycleReactDriver(<Dummy />, '#app');
+
+    const actual = cycleReactDriver();
+
+    expect(actual.select).to.be.a('function');
+  });
+
+  describe('When rendering connected components', () => {
     it('Should render the components normally if the observables don\'t emit anything', () => {
       const ConnectedDummy = connect()(Dummy);
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
@@ -170,6 +176,37 @@ describe('Cycle React Driver', () => {
 
       expect(renderMock.getWrapper().find(Dummy)).to.not.have.prop('filteredOut');
       expect(renderMock.getWrapper().find(Dummy)).to.not.have.prop('filteredOut');
+    });
+  });
+
+  describe('When retrieving input from connected components', () => {
+    it('Should pass a callback function in wrapped component\'s props with specified name', () => {
+      const ConnectedDummy = connect(undefined, 'sendToCycle')(Dummy);
+
+      const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
+      cycleReactDriver();
+
+      expect(renderMock.getWrapper().find(Dummy)).to.have.prop('sendToCycle');
+      expect(renderMock.getWrapper().find(Dummy).prop('sendToCycle')).to.be.a('function');
+    });
+
+    it('Should provide an Observable via the source\'s select function', () => {
+      const ConnectedDummy = connect(undefined, 'sendToCycle')(Dummy);
+
+      const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
+      const sources = cycleReactDriver();
+
+      expect(sources.select(Dummy).subscribe).to.be.a('function');
+    });
+
+    it.skip('Should receive params passed to the callback as events in the Observable', () => {
+      const ConnectedDummy = connect(undefined, 'sendToCycle')(Dummy);
+
+      const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
+      const sources = cycleReactDriver();
+      renderMock.getWrapper().find(Dummy).prop('sendToCycle')('An event');
+
+      expect(sources.select(Dummy)).to.emit(Rx.ReactiveTest.onNext('An event'));
     });
   });
 });

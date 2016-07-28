@@ -12,12 +12,24 @@ const safeContain = (array) => (element) => {
   }
 };
 
-const connect = (props) => (Component) => {
+const sendToCycle = () => null;
+
+const connect = (propsToPass, callbackName) => (Component) => {
   class ConnectedComponent extends React.Component {
+    constructor() {
+      super();
+
+      if (typeof callbackName === 'string') {
+        this.state = {
+          [callbackName]: sendToCycle,
+        };
+      }
+    }
+
     componentDidMount() {
       if (this.context.cycleReactDriverObservable !== undefined) {
         this.context.cycleReactDriverObservable
-          .filter(safeContain(props))
+          .filter(safeContain(propsToPass))
           .subscribe(
             this.propSubscritpion.bind(this)
           );

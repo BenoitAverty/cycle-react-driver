@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
+import Rx from 'rxjs';
 
 /**
  * Wrapper component that sets the observables in the react context so they are visible
@@ -29,13 +30,13 @@ CycleWrapper.childContextTypes = {
 /**
  * Factory method for the cycle react driver.
  */
-function makeCycleReactDriver(element, selector) {
+function makeCycleReactDriver(element, querySelector) {
   if (typeof element === 'undefined') {
     throw Error('Missing or invalid react element');
   }
 
-  if (typeof selector !== 'string') {
-    throw new Error('Missing or invalid selector');
+  if (typeof querySelector !== 'string') {
+    throw new Error('Missing or invalid querySelector');
   }
 
   function cycleReactDriver(sink) {
@@ -45,7 +46,9 @@ function makeCycleReactDriver(element, selector) {
       </CycleWrapper>
     );
 
-    ReactDOM.render(tree, document.querySelector(selector));
+    ReactDOM.render(tree, document.querySelector(querySelector));
+
+    return { select: selector => new Rx.Subject() };
   }
 
   return cycleReactDriver;
