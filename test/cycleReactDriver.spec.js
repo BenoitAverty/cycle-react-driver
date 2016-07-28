@@ -158,5 +158,18 @@ describe('Cycle React Driver', () => {
 
       expect(renderMock.getWrapper().find(Dummy)).to.not.have.prop('prop');
     });
+
+    it('Should only render props specified in connect', () => {
+      const ConnectedDummy = connect(['filteredIn'])(Dummy);
+      const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
+      const props$ = new Rx.Subject();
+
+      cycleReactDriver(props$);
+      props$.next({ name: 'filteredIn', value: 'present' });
+      props$.next({ name: 'filteredOut', value: 'absent' });
+
+      expect(renderMock.getWrapper().find(Dummy)).to.not.have.prop('filteredOut');
+      expect(renderMock.getWrapper().find(Dummy)).to.not.have.prop('filteredOut');
+    });
   });
 });

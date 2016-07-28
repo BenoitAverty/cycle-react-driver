@@ -20,10 +20,11 @@ const LabeledSlider = (props) => (
 const BmiDisplay = (props) => (
   <h1>Your BMI is: <em>{Math.round(props.bmi*100)/100}</em></h1>
 );
+const ConnectedBmiDisplay = connect()(BmiDisplay);
 
 const App = (props) => (
   <div>
-    <BmiDisplay bmi={props.bmi} />
+    <ConnectedBmiDisplay />
     <LabeledSlider
       className="weight"
       label="Your Weight"

@@ -1,12 +1,26 @@
 import React from 'react';
 
-const connect = () => (Component) => {
+/**
+ * Returns true if the element is present in the array or if the array is undefined
+ */
+const safeContain = (array) => (element) => {
+  if (array === undefined) {
+    return true;
+  }
+  else {
+    return array.indexOf(element) >= 0;
+  }
+};
+
+const connect = (props) => (Component) => {
   class ConnectedComponent extends React.Component {
     componentDidMount() {
       if (this.context.cycleReactDriverObservable !== undefined) {
-        this.context.cycleReactDriverObservable.subscribe(
-          this.propSubscritpion.bind(this)
-        );
+        this.context.cycleReactDriverObservable
+          .filter(safeContain(props))
+          .subscribe(
+            this.propSubscritpion.bind(this)
+          );
       }
     }
 
