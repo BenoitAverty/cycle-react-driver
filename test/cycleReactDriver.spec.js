@@ -199,14 +199,19 @@ describe('Cycle React Driver', () => {
       expect(sources.select(Dummy).subscribe).to.be.a('function');
     });
 
-    it.skip('Should receive params passed to the callback as events in the Observable', () => {
+    it('Should receive params passed to the callback as events in the Observable', () => {
       const ConnectedDummy = connect(undefined, 'sendToCycle')(Dummy);
 
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
       const sources = cycleReactDriver();
       renderMock.getWrapper().find(Dummy).prop('sendToCycle')('An event');
 
-      expect(sources.select(Dummy)).to.emit(Rx.ReactiveTest.onNext('An event'));
+      let actual;
+      sources.select(Dummy).subscribe(e => {
+        actual = e;
+      });
+
+      expect(actual).to.equal('An event');
     });
   });
 });

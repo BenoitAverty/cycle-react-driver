@@ -8,7 +8,10 @@ import Rx from 'rxjs';
  */
 class CycleWrapper extends React.Component {
   getChildContext() {
-    return { cycleReactDriverObservable: this.props.observable };
+    return {
+      cycleReactDriverObservable: this.props.observable,
+      callback: this.props.callback,
+    };
   }
 
   render() {
@@ -21,10 +24,12 @@ class CycleWrapper extends React.Component {
 }
 CycleWrapper.propTypes = {
   observable: React.PropTypes.object,
+  callback: React.PropTypes.func,
   children: React.PropTypes.element,
 };
 CycleWrapper.childContextTypes = {
   cycleReactDriverObservable: React.PropTypes.object,
+  callback: React.PropTypes.func,
 };
 
 /**
@@ -39,16 +44,21 @@ function makeCycleReactDriver(element, querySelector) {
     throw new Error('Missing or invalid querySelector');
   }
 
+  const source = new Rx.ReplaySubject();
+  function callback(event) {
+    source.next(event);
+  }
+
   function cycleReactDriver(sink) {
     const tree = (
-      <CycleWrapper observable={sink}>
+      <CycleWrapper observable={sink} callback={callback}>
         {element}
       </CycleWrapper>
     );
 
     ReactDOM.render(tree, document.querySelector(querySelector));
 
-    return { select: selector => new Rx.Subject() };
+    return { select: () => source };
   }
 
   return cycleReactDriver;

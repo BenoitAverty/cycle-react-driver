@@ -12,20 +12,8 @@ const safeContain = (array) => (element) => {
   }
 };
 
-const sendToCycle = () => null;
-
 const connect = (propsToPass, callbackName) => (Component) => {
   class ConnectedComponent extends React.Component {
-    constructor() {
-      super();
-
-      if (typeof callbackName === 'string') {
-        this.state = {
-          [callbackName]: sendToCycle,
-        };
-      }
-    }
-
     componentDidMount() {
       if (this.context.cycleReactDriverObservable !== undefined) {
         this.context.cycleReactDriverObservable
@@ -55,11 +43,20 @@ const connect = (propsToPass, callbackName) => (Component) => {
     }
 
     render() {
-      return <Component {...this.props} {...this.state} />;
+      const childProps = {
+        ...this.props,
+        ...this.state,
+      };
+      if (typeof callbackName === 'string' && callbackName.length > 0) {
+        childProps[callbackName] = this.context.callback;
+      }
+
+      return <Component {...childProps} />;
     }
   }
   ConnectedComponent.contextTypes = {
     cycleReactDriverObservable: React.PropTypes.object,
+    callback: React.PropTypes.func,
   };
 
   return ConnectedComponent;
