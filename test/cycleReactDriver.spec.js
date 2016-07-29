@@ -174,7 +174,7 @@ describe('Cycle React Driver', () => {
       props$.next({ name: 'filteredIn', value: 'present' });
       props$.next({ name: 'filteredOut', value: 'absent' });
 
-      expect(renderMock.getWrapper().find(Dummy)).to.not.have.prop('filteredOut');
+      expect(renderMock.getWrapper().find(Dummy)).to.have.prop('filteredIn', 'present');
       expect(renderMock.getWrapper().find(Dummy)).to.not.have.prop('filteredOut');
     });
   });

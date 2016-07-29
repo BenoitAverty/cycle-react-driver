@@ -3,12 +3,12 @@ import React from 'react';
 /**
  * Returns true if the element is present in the array or if the array is undefined
  */
-const safeContain = (array) => (element) => {
-  if (array === undefined) {
+const includedProp = (includedProps) => (element) => {
+  if (includedProps === undefined) {
     return true;
   }
   else {
-    return array.indexOf(element) >= 0;
+    return includedProps.indexOf(element.name) >= 0;
   }
 };
 
@@ -17,7 +17,7 @@ const connect = (propsToPass, callbackName) => (Component) => {
     componentDidMount() {
       if (this.context.cycleReactDriverObservable !== undefined) {
         this.context.cycleReactDriverObservable
-          .filter(safeContain(propsToPass))
+          .filter(includedProp(propsToPass))
           .subscribe(
             this.propSubscritpion.bind(this)
           );
