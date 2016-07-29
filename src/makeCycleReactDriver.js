@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import Rx from 'rxjs';
+import RxJSAdapter from '@cycle/rxjs-adapter';
 
 /**
  * Wrapper component that sets the observables in the react context so they are visible
@@ -60,6 +61,7 @@ function makeCycleReactDriver(element, querySelector) {
 
     return { select: () => source };
   }
+  cycleReactDriver.streamAdapter = RxJSAdapter;
 
   return cycleReactDriver;
 }

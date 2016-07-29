@@ -1,5 +1,4 @@
 import { run } from '@cycle/rxjs-run';
-import { makeDOMDriver } from '@cycle/dom';
 import React from 'react';
 import { makeCycleReactDriver, connect } from '../src';
 import Rx from 'rxjs';
@@ -12,7 +11,14 @@ import Rx from 'rxjs';
 const LabeledSlider = (props) => (
   <div className={props.className}>
     <label htmlFor={props.id}>{props.label}:</label>
-    <input type="range" min={props.min} max={props.max} id={props.id} defaultValue={props.value} />
+    <input
+      type="range"
+      min={props.min}
+      max={props.max}
+      id={props.id}
+      defaultValue={props.value}
+      onChange={props.onChange}
+    />
     <span>({props.value} {props.unit})</span>
   </div>
 );
@@ -20,7 +26,7 @@ const LabeledSlider = (props) => (
 const BmiDisplay = (props) => (
   <h1>Your BMI is: <em>{Math.round(props.bmi*100)/100}</em></h1>
 );
-const ConnectedBmiDisplay = connect()(BmiDisplay);
+const ConnectedBmiDisplay = connect(['bmi'])(BmiDisplay);
 
 const App = (props) => (
   <div>
@@ -32,6 +38,7 @@ const App = (props) => (
       id="weight"
       value={props.weight}
       unit="kg"
+      onChange={e => props.sendToCycle({ from: 'weight', e })}
     />
     <LabeledSlider
       className="height"
@@ -41,21 +48,24 @@ const App = (props) => (
       id="height"
       value={props.height}
       unit="cm"
+      onChange={e => props.sendToCycle({ from: 'height', e })}
     />
   </div>
 );
-const ConnectedApp = connect()(App);
+const ConnectedApp = connect(['weight', 'height'], 'sendToCycle')(App);
 
 /**
  * Cycle app
  */
-const main = ({ DOM }) => {
-  const weight$ = DOM.select('.weight input')
-    .events('input')
+const main = ({ react }) => {
+  const weight$ = react.select('.weight input')
+    .filter(o => o.from === 'weight')
+    .map(o => o.e)
     .map(e => e.target.valueAsNumber)
     .startWith(65);
-  const height$ = DOM.select('.height input')
-    .events('input')
+  const height$ = react.select('.height input')
+    .filter(o => o.from === 'height')
+    .map(o => o.e)
     .map(e => e.target.valueAsNumber)
     .startWith(170);
   const bmi$ = Rx.Observable.combineLatest(weight$, height$, (w, h) => w / (h*h/10000));
@@ -76,7 +86,6 @@ const main = ({ DOM }) => {
  */
 const drivers = {
   react: makeCycleReactDriver(<ConnectedApp />, '#app'),
-  DOM: makeDOMDriver('#app'),
 };
 
 run(main, drivers);
