@@ -54,7 +54,7 @@
     "chai-enzyme": "^0.5.0",
     "codecov": "^1.0.1",
     "commitizen": "^2.8.2",
-    "cross-env": "^1.0.8",
+    "cross-env": "^2.0.0",
     "cz-conventional-changelog": "^1.1.6",
     "enzyme": "^2.3.0",
     "eslint": "^2.12.0",
@@ -67,8 +67,11 @@
     "mocha": "^2.5.1",
     "npm-run-all": "^2.1.2",
     "nyc": "^7.0.0",
-    "react-addons-test-utils": "^15.2.0",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "react-addons-test-utils": "^15.3.0",
     "rimraf": "^2.5.2",
+    "rxjs": "5.0.0-beta.10",
     "semantic-release": "^4.3.5",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
@@ -81,8 +84,8 @@
   },
   "peerDependencies": {
     "rxjs": "^5.0.0-beta.10",
-    "react": "^15.2.0",
-    "react-dom": "^15.2.0"
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0"
   },
   "config": {
     "ghooks": {
