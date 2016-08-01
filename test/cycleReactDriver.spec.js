@@ -213,5 +213,20 @@ describe('Cycle React Driver', () => {
 
       expect(actual).to.equal('An event');
     });
+
+    it('Should only receive events passed by the component in select function', () => {
+      const OtherDummy = () => null;
+      const ConnectedDummy = connect(undefined, 'sendToCycle')(Dummy);
+
+      const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
+      const sources = cycleReactDriver();
+      renderMock.getWrapper().find(Dummy).prop('sendToCycle')('after');
+
+      let actual = 'before';
+      sources.select(OtherDummy).subscribe(e => {
+        actual = e;
+      });
+      expect(actual).to.equal('before');
+    });
   });
 });
