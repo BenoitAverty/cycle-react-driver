@@ -48,7 +48,7 @@ const connect = (propsToPass, callbackName) => (Component) => {
         ...this.state,
       };
       if (typeof callbackName === 'string' && callbackName.length > 0) {
-        childProps[callbackName] = this.context.callback;
+        childProps[callbackName] = this.context.callback(Component.name);
       }
 
       return <Component {...childProps} />;

@@ -45,10 +45,13 @@ function makeCycleReactDriver(element, querySelector) {
     throw new Error('Missing or invalid querySelector');
   }
 
-  const source = new Rx.ReplaySubject();
-  function callback(event) {
-    source.next(event);
-  }
+  const source$ = new Rx.ReplaySubject();
+  const callback = (componentName) => (event) => {
+    source$.next({
+      event,
+      componentName,
+    });
+  };
 
   function cycleReactDriver(sink) {
     const tree = (
@@ -59,7 +62,11 @@ function makeCycleReactDriver(element, querySelector) {
 
     ReactDOM.render(tree, document.querySelector(querySelector));
 
-    return { select: () => source };
+    return {
+      // Select function: use information passed in event to filter the stream then
+      // map to the actual event.
+      select: comp => source$.filter(e => e.componentName === comp.name).map(e => e.event),
+    };
   }
   cycleReactDriver.streamAdapter = RxJSAdapter;
 
