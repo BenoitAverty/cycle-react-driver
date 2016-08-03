@@ -3,35 +3,7 @@ import React from 'react';
 import Rx from 'rxjs';
 import RxJSAdapter from '@cycle/rxjs-adapter';
 
-/**
- * Wrapper component that sets the observables in the react context so they are visible
- * by "connect".
- */
-class CycleWrapper extends React.Component {
-  getChildContext() {
-    return {
-      cycleReactDriverObservable: this.props.observable,
-      callback: this.props.callback,
-    };
-  }
-
-  render() {
-    return (
-      <div>
-        {this.props.children}
-      </div>
-    );
-  }
-}
-CycleWrapper.propTypes = {
-  observable: React.PropTypes.object,
-  callback: React.PropTypes.func,
-  children: React.PropTypes.element,
-};
-CycleWrapper.childContextTypes = {
-  cycleReactDriverObservable: React.PropTypes.object,
-  callback: React.PropTypes.func,
-};
+import CycleWrapper from './CycleWrapper';
 
 /**
  * Factory method for the cycle react driver.
