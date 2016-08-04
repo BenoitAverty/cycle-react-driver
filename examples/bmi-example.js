@@ -1,7 +1,8 @@
 import { run } from '@cycle/rxjs-run';
 import React from 'react';
-import { makeCycleReactDriver, connect } from '../src';
 import Rx from 'rxjs';
+
+import { makeCycleReactDriver, connect } from '../src';
 
 /* eslint react/prop-types: "off" */
 
@@ -68,7 +69,7 @@ const main = ({ react }) => {
     .map(o => o.e)
     .map(e => e.target.valueAsNumber)
     .startWith(170);
-  const bmi$ = Rx.Observable.combineLatest(weight$, height$, (w, h) => w / (h*h/10000));
+  const bmi$ = Rx.Observable.combineLatest(weight$, height$, (w, h) => w / ((h*h)/10000));
 
   const props$ = Rx.Observable.merge(
     weight$.map(value => ({ name: 'weight', value })),

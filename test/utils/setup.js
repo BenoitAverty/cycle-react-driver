@@ -1,3 +1,4 @@
+/* global document */
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
 import chaiEnzyme from 'chai-enzyme';

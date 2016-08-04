@@ -8,6 +8,8 @@
     "brace-style": [2, "stroustrup"],
     "quote-props": [2, "consistent-as-needed"],
     "new-cap": 0,
+    "react/jsx-filename-extension": 0,
+    "import/no-extraneous-dependencies": 0 
   },
   "parserOptions": {
     "ecmaFeatures": {

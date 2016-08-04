@@ -2,7 +2,7 @@ import React from 'react';
 
 /* eslint react/no-multi-comp: "off", react/prop-types: "off" */
 
-export class Dummy extends React.Component {
+export default class Dummy extends React.Component {
   constructor() {
     super();
     this.state = { title: 'Title' };

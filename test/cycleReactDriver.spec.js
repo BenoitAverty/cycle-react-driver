@@ -8,7 +8,7 @@ import makeCycleReactDriver from '../src/makeCycleReactDriver';
 import connect from '../src/connect';
 
 import makeRenderMock from './utils/renderMock';
-import { Dummy } from './utils/dummyComponents';
+import Dummy from './utils/dummyComponents';
 
 describe('makeCycleReactDriver', () => {
   it('should accept a selector and a jsx expression as input', () => {

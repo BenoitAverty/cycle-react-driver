@@ -21,7 +21,8 @@
     "clean": "npm-run-all --parallel clean:*",
     "clean:build": "rimraf dist lib",
     "clean:coverage": "rimraf .nyc_output coverage",
-    "examples": "webpack-dev-server --config examples.webpack.config.js --content-base examples/ --inline"
+    "examples": "webpack-dev-server --config examples.webpack.config.js --content-base examples/ --inline",
+    "linter": "eslint"
   },
   "repository": {
     "type": "git",
@@ -57,14 +58,14 @@
     "cross-env": "^2.0.0",
     "cz-conventional-changelog": "^1.1.6",
     "enzyme": "^2.3.0",
-    "eslint": "^2.12.0",
-    "eslint-config-airbnb": "^9.0.1",
-    "eslint-plugin-import": "^1.8.0",
-    "eslint-plugin-jsx-a11y": "^1.2.2",
-    "eslint-plugin-react": "^5.1.1",
+    "eslint": "^3.2.2",
+    "eslint-config-airbnb": "^10.0.0",
+    "eslint-plugin-import": "^1.12.0",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^6.0.0",
     "ghooks": "^1.2.4",
     "jsdom": "^9.4.1",
-    "mocha": "^2.5.1",
+    "mocha": "^3.0.1",
     "npm-run-all": "^2.1.2",
     "nyc": "^7.0.0",
     "react": "^15.3.0",
@@ -80,6 +81,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "@cycle/rxjs-adapter": "^3.0.1",
     "in-publish": "^2.0.0"
   },
   "peerDependencies": {
