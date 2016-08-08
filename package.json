@@ -21,8 +21,7 @@
     "clean": "npm-run-all --parallel clean:*",
     "clean:build": "rimraf dist lib",
     "clean:coverage": "rimraf .nyc_output coverage",
-    "examples": "webpack-dev-server --config examples.webpack.config.js --content-base examples/ --inline",
-    "linter": "eslint"
+    "examples": "webpack-dev-server --config examples.webpack.config.js --content-base examples/ --inline"
   },
   "repository": {
     "type": "git",
