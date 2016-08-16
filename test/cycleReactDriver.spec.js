@@ -165,6 +165,23 @@ describe('Cycle React Driver', () => {
       expect(renderMock.getWrapper().find(Dummy)).to.not.have.prop('prop');
     });
 
+    it('Should render a prop from the driver if its value is falsy but defined', () => {
+      const ConnectedDummy = connect()(Dummy);
+      const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');
+      const prop = new Rx.Subject();
+
+      cycleReactDriver(prop);
+      prop.next({ name: 'prop1', value: 0 });
+      prop.next({ name: 'prop2', value: null });
+      prop.next({ name: 'prop3', value: '' });
+      prop.next({ name: 'prop4', value: false });
+
+      expect(renderMock.getWrapper().find(Dummy)).to.have.prop('prop1', 0);
+      expect(renderMock.getWrapper().find(Dummy)).to.have.prop('prop2', null);
+      expect(renderMock.getWrapper().find(Dummy)).to.have.prop('prop3', '');
+      expect(renderMock.getWrapper().find(Dummy)).to.have.prop('prop4', false);
+    });
+
     it('Should only render props specified in connect', () => {
       const ConnectedDummy = connect(['filteredIn'])(Dummy);
       const cycleReactDriver = makeCycleReactDriver(<ConnectedDummy />, '#app');

@@ -25,7 +25,7 @@ const connect = (propsToPass, callbackName) => (Component) => {
     }
 
     propSubscritpion(prop) {
-      if (prop.value) {
+      if (prop.value !== undefined) {
         this.setState({
           [prop.name]: prop.value,
         });

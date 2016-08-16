@@ -2,3 +2,8 @@ src/
 test/
 .nyc_output/
 coverage/
+examples/
+*.webpack.config.js
+.babelrc
+.eslintrc
+.gitignore
