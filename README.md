@@ -1,5 +1,7 @@
 # cycle-react-driver
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/BenoitAverty/cycle-react-driver.svg)](https://greenkeeper.io/)
+
 A CycleJS driver that can interact with ReactJS components.
 
 [![Travis](https://img.shields.io/travis/BenoitAverty/cycle-react-driver.svg)](https://travis-ci.org/BenoitAverty/cycle-react-driver)
